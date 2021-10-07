@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template
 from flask_wtf import CSRFProtect
 import sys
-sys.path.append('.')
+sys.path.append('./')
 
 csrf = CSRFProtect()
 
@@ -19,7 +19,7 @@ def create_app():
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
 
     """ Routes INIT """
-    from routes import base_route, auth_route
+    from flask_study_1.routes import base_route, auth_route
     app.register_blueprint(base_route.bp)
     app.register_blueprint(auth_route.bp)
 

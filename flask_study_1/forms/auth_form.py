@@ -8,8 +8,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
 
 
-
-
 class RegisterForm(LoginForm):
     password = PasswordField(
         'Password',
