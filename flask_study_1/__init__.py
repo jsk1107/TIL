@@ -13,6 +13,7 @@ def create_app():
 
     """ CSRF TOKEN """
     app.config['SECRET_KEY'] = 'secretkey'
+    app.config['SESSION_COOKIE_NAME'] = 'gogglekaap'
 
     """ Config INIT"""
     if app.config['DEBUG']:
