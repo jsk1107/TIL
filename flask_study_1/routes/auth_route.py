@@ -19,7 +19,6 @@ USERS.append(User('admin', 'admin', security.generate_password_hash('1234')))
 USERS.append(User('tester', 'tester', security.generate_password_hash('1234')))
 
 
-# FIXME: redirection이 안되고있음. 왜그러지?
 @bp.route('/')
 def index():
     return redirect(url_for(f'{NAME}.login'))
