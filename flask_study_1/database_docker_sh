@@ -1,0 +1,9 @@
+# bin/bash
+
+docker run --rm -d --name testdb \
+-p 3306:3306 
+-e MYSQL_DATABASE=flask_study_1 \
+-e MYSQL_ROOT_PASSWORD=password \
+mysql:5.7 \
+--character-set-server=utf8 \
+--collation-server=utf8_general_ci
