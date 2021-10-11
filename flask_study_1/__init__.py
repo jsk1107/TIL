@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import render_template
 from flask_wtf import CSRFProtect
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import sys
 sys.path.append('./')
 
@@ -14,6 +16,8 @@ def create_app():
     """ CSRF TOKEN """
     app.config['SECRET_KEY'] = 'secretkey'
     app.config['SESSION_COOKIE_NAME'] = 'gogglekaap'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/flask_study_1?charset=utf8'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     """ Config INIT"""
     if app.config['DEBUG']:
