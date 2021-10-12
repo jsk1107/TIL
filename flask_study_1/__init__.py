@@ -7,7 +7,8 @@ import sys
 sys.path.append('./')
 
 csrf = CSRFProtect()
-
+db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
 
@@ -15,13 +16,19 @@ def create_app():
 
     """ CSRF TOKEN """
     app.config['SECRET_KEY'] = 'secretkey'
-    app.config['SESSION_COOKIE_NAME'] = 'gogglekaap'
+    app.config['SESSION_COOKIE_NAME'] = 'flask_study_1'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/flask_study_1?charset=utf8'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     """ Config INIT"""
     if app.config['DEBUG']:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
+
+    """ Database INIT"""
+    db.init_app(app)
+    if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqllite'):
+        migrate.init_app(app, db, render_as_batch=True)
+    migrate.init_app(app, db)
 
     """ Routes INIT """
     from flask_study_1.routes import base_route, auth_route

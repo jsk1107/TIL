@@ -1,0 +1,1 @@
+from flask_study_1 import db
