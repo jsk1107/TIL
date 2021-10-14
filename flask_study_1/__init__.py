@@ -28,7 +28,8 @@ def create_app():
     db.init_app(app)
     if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqllite'):
         migrate.init_app(app, db, render_as_batch=True)
-    migrate.init_app(app, db)
+    else:
+        migrate.init_app(app, db)
 
     """ Routes INIT """
     from flask_study_1.routes import base_route, auth_route

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from flask_study_1.forms.auth_form import LoginForm, RegisterForm
+from flask_study_1.models.user import User as UserModel
 from werkzeug import security
 
 NAME = 'auth'
