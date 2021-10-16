@@ -19,6 +19,7 @@ def create_app():
     app.config['SESSION_COOKIE_NAME'] = 'flask_study_1'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/flask_study_1?charset=utf8'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
 
     """ Config INIT"""
     if app.config['DEBUG']:
@@ -35,6 +36,10 @@ def create_app():
     from flask_study_1.routes import base_route, auth_route
     app.register_blueprint(base_route.bp)
     app.register_blueprint(auth_route.bp)
+
+    """ Restx INIT """
+    from flask_study_1.apis import bp as api
+    app.register_blueprint(api)
 
     """ CSRF INIT"""
     csrf.init_app(app)
