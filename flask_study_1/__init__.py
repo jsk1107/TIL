@@ -1,23 +1,24 @@
+import sys
+sys.path.append('.')
+
 from flask import Flask, g
 from flask import render_template
 from flask_wtf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-import sys
-sys.path.append('./')
 
 csrf = CSRFProtect()
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app(Config=None):
+def create_app(config=None):
 
     app = Flask(__name__)
 
     """ Flask Config """
     from .configs import DevelopmentConfig, ProductionConfig
 
-    if not Config:
+    if not config:
         if app.config['DEBUG']:
             config = DevelopmentConfig()
         else:

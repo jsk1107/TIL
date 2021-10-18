@@ -25,6 +25,6 @@ class ProductionConfig(DevelopmentConfig):
 
 class TestingConfig(DevelopmentConfig):
     __test__ = False
-    TESTIN = True
+    TESTING = True
     # Test시에는 Sqllite를 이용해서 테스트를 한다.
-    SQLALCHEMY_DATABASE_URI = f'sqllite:///{os.path.join(BASE_PATH, "sqllite_test.db")}'
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{os.path.join(BASE_PATH, "sqllite_test.db")}'
