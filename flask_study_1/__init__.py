@@ -10,20 +10,19 @@ csrf = CSRFProtect()
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app():
+def create_app(Config=None):
 
     app = Flask(__name__)
 
-    """ CSRF TOKEN """
-    app.config['SECRET_KEY'] = 'secretkey'
-    app.config['SESSION_COOKIE_NAME'] = 'flask_study_1'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/flask_study_1?charset=utf8'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
+    """ Flask Config """
+    from .configs import DevelopmentConfig, ProductionConfig
 
-    """ Config INIT"""
-    if app.config['DEBUG']:
-        app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
+    if not Config:
+        if app.config['DEBUG']:
+            config = DevelopmentConfig()
+        else:
+            config = ProductionConfig()
+    app.config.from_object(config)
 
     """ Database INIT"""
     db.init_app(app)
