@@ -1,7 +1,7 @@
-{% macro redner_text_field(filed) %}
+{% macro render_text_field(field) %}
     <div style=width:100%; class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         {{ kwarg }}
-        {{ filed(class="mdl-textfield__input", **kwargs) }}
-        {{ filed.label(class="mdl-textfield__label")  }}
+        {{ field(class="mdl-textfield__input", **kwargs) }}
+        {{ field.label(class="mdl-textfield__label")  }}
     </div>
 {% endmacro %}

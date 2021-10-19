@@ -4,7 +4,7 @@
     Login
 {%- endblock %}
 
-{% from "_mdlforms.html" import redner_text_field %}
+{% from "_mdlforms.html" import render_text_field %}
 
 {% block body -%}
     <div class="mdl-grid">
@@ -26,8 +26,8 @@
                     </div>
                     <div class="mdl-card__supporting-text">
                         <!--TODO: Macro 만들기-->
-                        {{ redner_text_field(form.user_id, minlength=4, maxlength=20, autocomplete='off') }}
-                        {{ redner_text_field(form.password, minlength=4, maxlength=20, autocomplete='off') }}
+                        {{ render_text_field(form.user_id, minlength=4, maxlength=20, autocomplete='off') }}
+                        {{ render_text_field(form.password, minlength=4, maxlength=20, autocomplete='off') }}
                     </div>
 
                     <div class="mdl-card__actions mdl-card--border">
