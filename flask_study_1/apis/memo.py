@@ -29,11 +29,9 @@ class MemoList(Resource):
     @ns.marshal_list_with(memo, skip_none=True)
     def get(self):
         """ 메모 복수 조회 """
-        data = MemoModel.query.\
-            join(UserModel, UserModel.id == MemoModel.id).\
-            filter(UserModel.id == g.user.id).\
-            order_by(MemoModel.created_at.desc()).\
-            limit(10).all()
+        data = MemoModel.query.join(UserModel, UserModel.id == MemoModel.user_id
+                                    ).filter(UserModel.id == g.user.id
+                                             ).order_by(MemoModel.created_at.desc()).limit(10).all()
         return data
 
     @ns.expect(parser)
