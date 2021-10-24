@@ -282,10 +282,23 @@ const MEMO = (function(){
   const getMemo = function(id){
     /* GET /api/memos/{id} */
 
-    console.log('getMemo', id);
-    // TODO
-    // 1) 모달 필드를 리셋해준다: beforeSend - resetModalFields
-    // 2) 조회한 데이터로 모달 필드를 반영하고, 텍스트 에리어를 트리거링 한다
+    $.ajax({
+      url: '/api/memos/' + id,
+      type: 'get',
+      beforeSend: function(){
+        resetModalFields();
+      },
+      success: function(r){
+        $modalTitle.val(r.title);
+        $modalContent.val(r.content);
+        $modalClose.attr('data-id', r.id);
+        if (r.linked_image) {
+          const ihtml = '<img src="' + r.linked_image + '" />';
+          $modalMedia.html(ihtml);
+        }
+        $modalContent.trigger('keyup');
+      }
+    })
   };
 
   /* 메모 삭제 */
@@ -293,12 +306,23 @@ const MEMO = (function(){
     /* PUT /api/memos/{id} */
 
     e.preventDefault();
-    console.log('deleteMemo', id);
-    // TODO
-    // 1) 컨테이너 아이템 삭제
-    // 2) 그리드에 반영
-    // 3) 에러시 얼럿
-    // 4) 그리드 리셋: done - _resetGridLayout or masonry.layout
+    $.ajax({
+      url: '/api/memos/' + id,
+      type: 'put',
+      data: {
+        is_deleted: true
+      },
+      success: function(r){
+        const $elems = $('#item' + r.id);
+        $GRID.masonry('remove', $elems);
+      },
+      error: function(e){
+        alert(e.responseText);
+      },
+      complete: function(){
+        $GRID.masonry('layout');
+      }
+    });
   };
 
 
@@ -314,14 +338,29 @@ const MEMO = (function(){
     const $media = $item.find('.item-media');
     const data = new FormData(form);
 
-    console.log('updateMemo');
     if ($modalModified.val() == 1) {
-      // TODO
-      // 1) AJAX form
-      // 2) 업데이트 데이터 전송
-      // 3) 리턴값 메모 아이템에 반영
-      // 4) 에러 노출
-      // 5) 완료시 모달리셋: done - resetModalFields(true)
+      $.ajax({
+        url: '/api/memos/' + id,
+        type: 'put',
+        data: data,
+        enctype: 'multipart/form-data',
+        contentType: false,
+        processData: false,
+        success: function(r){
+          $title.html(r.title);
+          $content.html(r.content);
+          if (r.linked_image) {
+            const ihtml = '<img src="' + r.linked_image + '" />';
+            $media.html(ihtml);
+          }
+        },
+        error: function(e){
+          alert(e.responseText);
+        },
+        complete: function(){
+          resetModalFields(true);
+        }
+      })
     }
   };
 
@@ -335,12 +374,21 @@ const MEMO = (function(){
       'is_deleted': false
     }
 
-    console.log('reviveMemo', id);
-    // TODO
-    // 1) 업데이트 데이터 전송
-    // 2) 메모 아이템 화면에서 제거
-    // 4) 에러 노출
-    // 5) 완료시 그리드 리셋과 추가조회: done - _resetGridLayout()
+    $.ajax({
+      url: '/api/memos/' + id,
+      type: 'put',
+      data: data,
+      success: function(r){
+        $elems = $('#item' + r.id)
+        $GRID.masonry('remove', $elems)
+      },
+      error: function (e){
+        alert(e.responseText)
+      },
+      complete: function(){
+        _resetGridLayout()
+      }
+    })
   };
 
   /* 이미지 제거 */
@@ -349,13 +397,23 @@ const MEMO = (function(){
 
     e.preventDefault();
     const $media = $('.item[data-id="' + id + '"]').find('.item-media');
-    console.log('detachImage', id);
+
     if (id && $media.find('img').length > 0){
-      // TODO
-      // 1) 메모 이미지 삭제 요청
-      // 2) 메모 아이템에 메모삭제
-      // 3) 에러시 얼럿노출
-      // 4) 완료시 모달 리셋: resetModalFields(true);
+
+      $.ajax({
+        url: '/api/memos/' + id + '/image',
+        type: 'delete',
+        success: function(r){
+          $media.html('');
+        },
+        error: function(e){
+          alert(e.responseText);
+        },
+        complete: function(){
+          resetModalFields(true);
+        }
+      })
+
     }
   }
 
