@@ -347,4 +347,8 @@ $RECYCLE.BIN/
 
 # pycharm .idea
 *.idea
+
+# user images
+flask_study_1/static/user_images
+
 # End of https://www.toptal.com/developers/gitignore/api/python,flask,windows,pycharm
