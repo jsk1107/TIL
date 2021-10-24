@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 sys.path.append('.')
 from flask_study_1.configs import TestingConfig
@@ -35,10 +36,19 @@ def app(user_data, memo_data):
         db.session.commit()
         yield app
         # 불필요 디비 정리
+
+        # /static/user_images/tester(==user_id)
+        path = os.path.join(
+            app.static_folder,
+            app.config['USER_STATIC_BASE_DIR'],
+            user_data['user_id']
+        )
+        shutil.rmtree(path, True)
         db.drop_all()
         db_path = app.config['SQLALCHEMY_DATABASE_URI'].replace(
             'sqlite:///', ''
         )
+
         if os.path.isfile(db_path):
             os.remove(db_path)
 
