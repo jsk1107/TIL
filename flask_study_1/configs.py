@@ -9,7 +9,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:password@localhost/flask_study_1?charset=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SWAGGER_UI_DOC_EXPANSION = 'list'
-
+    USER_STATIC_BASE_DIR = 'user_images'
 
 class DevelopmentConfig(Config):
     """ Flask Config for dev """
@@ -19,7 +19,7 @@ class DevelopmentConfig(Config):
     WTF_CSRF_ENABLED = False
 
 
-class ProductionConfig(DevelopmentConfig):
+class ProductionConfig(Config):
     pass
 
 
