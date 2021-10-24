@@ -1,5 +1,3 @@
-
-
 def test_auth(client):
     r = client.get('/auth/register', follow_redirects=True)
     assert r.status_code == 200

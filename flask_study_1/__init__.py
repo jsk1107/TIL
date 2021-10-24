@@ -7,6 +7,7 @@ from flask_wtf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
+
 csrf = CSRFProtect()
 db = SQLAlchemy()
 migrate = Migrate()
@@ -57,4 +58,5 @@ def create_app(config=None):
     @app.errorhandler(404)
     def page_404(error):
         return render_template('404.html'), 404
+
     return app

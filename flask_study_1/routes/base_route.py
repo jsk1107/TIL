@@ -6,7 +6,7 @@ bp = Blueprint(NAME, __name__)
 
 @bp.route('/')
 def index():
-
+    print('123')
     if not g.user:
         return redirect(url_for('auth.login'))
     return render_template('index.html')
