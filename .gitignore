@@ -341,15 +341,17 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Custom ignore
+########################## Custom ignore ##########################
 # sql lite
 *.db
 
 # pycharm .idea
 *.idea
 
-# user images
+# images
 flask_study_1/static/user_images
+/study_opencv_python/data/
+########################## Custom ignore ##########################
 
 # End of https://www.toptal.com/developers/gitignore/api/python,flask,windows,pycharm
-/study_opencv_python/data/
+
