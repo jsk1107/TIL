@@ -13,13 +13,19 @@ if src is None:
 src_ycrcb = cv2.cvtColor(src, cv2.COLOR_BGR2YCrCb)
 
 """
-    연산을 진행할때는 최대한 실수타입으로 변환해서 진행하는것이 더 정교하게 작업이 가능하다.
+    연산을 진행할때는 최대한 실수타입으로 변환해서 진행하는것이 더 정교하게 작업이 가능하고 결과물이 좋다.
     물론 연산량은 좀 증가하겠지만...
 """
 src_y = src_ycrcb[:, :, 0].astype(np.float32)
 blr = cv2.GaussianBlur(src_y, (0, 0), 2.)
 src_ycrcb[:, :, 0] = np.clip(2.*src_y - blr, 0, 255).astype(np.uint8)
 dst = cv2.cvtColor(src_ycrcb, cv2.COLOR_YCrCb2BGR)
+
+# 이렇게 작업하지 말것.
+# src_y = src_ycrcb[:, :, 0]
+# blr = cv2.GaussianBlur(src_y, (0, 0), 2)
+# src_ycrcb[:, :, 0] = np.clip(2.*src_y - blr, 0, 255).astype(np.uint8)
+# dst2 = cv2.cvtColor(src_ycrcb, cv2.COLOR_YCrCb2BGR)
 
 cv2.imshow('src', src)
 cv2.imshow('dst', dst)
