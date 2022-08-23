@@ -21,10 +21,10 @@ def check_name(len_name):
         i+=1
     return res
 
-def dfs(src, cnt):
+def dfs(src, cnt, score_list):
     global samsung
     tmp_samsung = samsung
-    score_list = []
+
     len_name, name, score = src['len'][cnt], src['name'][cnt], src['score'][cnt]
 
 
@@ -38,7 +38,8 @@ def dfs(src, cnt):
 
     if FLAG:
         score_list.append(score)
-    dfs(src, cnt+1)
+    print(score_list)
+    dfs(src, cnt+1, score_list)
 
 
 DATA_PATH = 'C:\\Users\\QQQ\\Downloads\\sample_input_1.txt'
@@ -60,8 +61,9 @@ for test_case in range(1, T + 1):
         src['score'].append(score)
 
     cnt = 0
+    score_list = []
     while True:
-        dfs(src, cnt)
+        dfs(src, cnt, score_list)
         cnt += 1
 
 
