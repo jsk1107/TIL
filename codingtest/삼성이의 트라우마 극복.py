@@ -23,15 +23,22 @@ def check_name(len_name):
 
 def dfs(src, cnt):
     global samsung
-
-
+    tmp_samsung = samsung
+    score_list = []
     len_name, name, score = src['len'][cnt], src['name'][cnt], src['score'][cnt]
-    candidate_name = check_name(len_name)
-    if name in candidate_name:
-        dfs(src, cnt+1)
-    else:
-        return
 
+
+    name_lists = list(name)
+    FLAG = False
+
+    for spelling in name_lists:
+        if spelling in samsung:
+            FLAG = True
+            tmp_samsung.remove(spelling)
+
+    if FLAG:
+        score_list.append(score)
+    dfs(src, cnt+1)
 
 
 DATA_PATH = 'C:\\Users\\QQQ\\Downloads\\sample_input_1.txt'
@@ -39,7 +46,7 @@ sys.stdin = open(DATA_PATH, "r")
 
 T = int(input())
 for test_case in range(1, T + 1):
-    samsung = "SAMSUNG"
+    samsung = ["S", "A", "M", "S", "U", "N", "G"]
     num_person = int(input())
 
     src = {'len': [], 'name': [], 'score': []}
