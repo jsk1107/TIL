@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Author: jsk1107
-# Platform: Leetcode(https://leetcode.com/problems/path-sum/)
+# Platform: Leetcode(https://leetcode.com/problems/perfect-squares/)
 
 
 from collections import deque
