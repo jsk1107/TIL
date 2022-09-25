@@ -7,7 +7,6 @@ const ID_KEY = "ID";
 const HIDDEN_KEY = "hidden"
 
 function onLoginSubmit(event){
-    event.preventDefault(); // Submit이후 Page 새로고침 방지
     
     const id = loginId.value;  
     loginForm.classList.add(HIDDEN_KEY);
@@ -17,7 +16,7 @@ function onLoginSubmit(event){
 
 function paintGreeting(isId){
     greeting.classList.remove(HIDDEN_KEY);
-    greeting.innerText = `Hello ${isId}`;
+    greeting.querySelector("h2").innerText = `Hello ${isId}`;
 
 }
 

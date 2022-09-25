@@ -8,7 +8,5 @@ const imgSection = document.createElement("img");
 imgSection.src = images[randomNumber]
 imgSection.setAttribute("width", "800px") // setAttribute: 생성된 태그(노드)에 속성을 부여한다.
 
-console.log(imgSection, randomNumber);
-
 // document.body.appendChild는 body부분에 tag를 추가한다(맨마지막에 추가됨).
 document.body.appendChild(imgSection);
