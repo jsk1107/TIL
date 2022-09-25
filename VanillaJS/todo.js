@@ -2,16 +2,22 @@ const todoForm = document.querySelector("#todo-form");
 const todo = document.querySelector("#todo-form input");
 const todoList = document.querySelector("#todo-list");
 
+const list = [];
+const TODOLIST_KEY = "todoList";
+
+function paintTodo(todoLists){
+
+}
 
 function addTodoList(event){
-    event.preventDefault(); // Submit이후 Page 새로고침 방지
-    
+    event.preventDefault();
     const li = document.createElement("li");
-    li.innerText = todo.value;
+    const tmp = todo.value;
+    list.push(tmp);
+    li.innerText = tmp;
     todoList.appendChild(li);
-
-    localStorage.setItem("todoList", todo.value)
-}
+    localStorage.setItem(TODOLIST_KEY, JSON.stringify(list));
+    }
 
 
 if (isId === null){
@@ -19,6 +25,11 @@ if (isId === null){
 
 } else{
     todoForm.classList.remove(HIDDEN_KEY);
-    todoForm.addEventListener("submit", addTodoList);
+
+    const savedTodoList = localStorage.getItem(TODOLIST_KEY);
+    if (savedTodoList === null){
+        todoForm.addEventListener("submit", addTodoList);
+    } 
+    
     
 }
