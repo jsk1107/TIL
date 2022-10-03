@@ -9,121 +9,45 @@
 <body>
     <div id="root"></div>
 </body>
-<script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel"> 
     const root = document.getElementById("root");
-    function MinuteToHours(){
-        const [minutes, setMinutes] = React.useState();
-        const [filpped, setFillped] = React.useState(false);
-        const onChange = (event) => {
-            setMinutes(event.target.value);
-        };
-        const reset = () => {
-            setMinutes(0);
-        };
-        const onFilp = () => {
-            reset();
-            setFillped((current) => !current);
-        };
+    
 
+    function Btn( {text, changeReverse}){         
         return (
-        <div>
-            <label htmlFor="minutes">Minutes</label>
-            <div>
-                <input 
-                id="minutes"
-                value={filpped ? minutes * 60 : minutes}
-                placeholder="Minutes"
-                type="number" 
-                onChange={onChange}
-                disabled={filpped === true}
-            />
-            </div>
-            <label htmlFor="hours">Hours</label>
-            <div>
-                <input 
-                id="minutes"
-                value={filpped ? minutes : minutes / 60}
-                placeholder="Hours"
-                type="number" 
-                onChange={onChange}
-                disabled={filpped  === false} 
-            />
-            </div>
-            <button onClick={reset}>Reset</button>
-            <button onClick={onFilp}>{filpped ? "Turn Back" : "Invert"}</button>
-        </div>
+            <button
+                onClick={changeReverse}
+                style={{
+                    backgroundColor: "tomato"
+                }}
+            >
+                {text}
+            </button>
         );
+
     }
-    function KmToMile(){
-        
-        const [km, setKm] = React.useState();
-        const [invert, setInvert] = React.useState(false);
-        const onChange = (event) => {
-            setKm(event.target.value);
-        };
-        const onInvert = () => {
-            setInvert((current) => !current);
-            reset();
-        };
-        const reset = () => {
-            setKm(0);
-        };
 
-        console.log(invert);
+    // 컴포턴트 별 Rendering이 되기 때문에 컴포턴트 內 렌더링될 요소(상속받는 컴포넌트가 많을 수록)가 많으면 느려질 수 있다. 
+    // 따라서 React.memo(func) 을 통해서 변경사항만 Rendering될 수 있도록 하는것이 좋다.
+    const MemoreizeBtn = React.memo(Btn);
 
-        return (
-            <div>
-                <label htmlFor="km">Km</label>
-                <div>
-                    <input
-                        id="km" 
-                        value={invert ? km * 1.609: km}
-                        placeholder="km" 
-                        type="number"
-                        onChange={onChange}
-                        disabled={invert === true}
-                    />
-                </div>
-                <label htmlFor="mile">Mile</label>
-                <div>
-                    <input 
-                        id="mile" 
-                        value={invert ? km: km / 1.609}
-                        placeholder="km" 
-                        type="number"
-                        onChange={onChange}
-                        disabled={invert === false}
-                    />
-                </div>
-                <button onClick={reset}>Reset</button>
-                <button onClick={onInvert}>{invert ? "Turn Back" : "Invert"}</button>
-            </div>
-        );
+    MemoreizeBtn.propTypes = {
+        text: PropTypes.string.isRequired,
+        changeReverse: PropTypes.func.isRequired
     }
     function App(){
-        
-        const [index, handleIndex] = React.useState("init");
-        const onChange = (event) => {
-            handleIndex(event.target.value);
-        }
-
+        const [reverse, setReverse] = React.useState("Saved Change");
+        const onReverse = () => {
+          setReverse("Reverse Change");
+        };
         return (
         <div>
-            <h1 className="hi">SUPER CONVERTER</h1>
-            <select onChange={onChange}>
-                <option value="init"> </option>
-                <option value="0"> Minute to Hour</option>
-                <option value="1"> Km to Mile</option>    
-            </select>
-
-            <hr/>
-            {index === "init" ? "Select what you want." : null}
-            {index === "0" ? <MinuteToHours/> : null}
-            {index === "1" ? <KmToMile/> : null}
-
+            <MemoreizeBtn text={reverse} changeReverse={onReverse}/>
+            <MemoreizeBtn text="Confirmed" />
         </div>
         );
     }
