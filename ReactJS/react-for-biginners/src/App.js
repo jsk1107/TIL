@@ -1,35 +1,37 @@
 
 import {useState, useEffect} from "react";
 
-function App() {
-  const [count, setCount] = useState(0);
-  const [input, setInput] = useState("");
-  const [inverse, setInverse] = useState(false);
-
-  const onClick = () => {
-    setCount((current) => current + 1);
-  }
+function App(){
+  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
   const onChange = (event) => {
-    setInput(event.target.value);
-    console.log(input);
+    setTodo(event.target.value);
   }
-  const onInverse = () => {
-    setInverse((current) => !current);
+  const onSubmit = (event) => {
+    event.preventDefault();
+    if (todo === ""){
+      return;
+    }
+
+    setTodos((currentArray) => [todo, ...currentArray]);
+    setTodo("");
+    
   }
-
-  useEffect(()=>{ console.log("hello", count) }, []);
-  useEffect(()=>{ console.log("hello", input) }, [input]);
-
+  console.log(todos);
   return (
     <div>
-      <h1>{count}</h1>
-      <div>
-        <input value={input} onChange={onChange} type="text" placeholder="write someting text"></input>
-      </div>
-      <button onClick={onClick}> Click </button>
-      <button onClick={onInverse}> {inverse ? "inverse" : "inversed"} </button>
+      <h1>My ToDo ({todos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input onChange={onChange} value={todo} type="text" placeholder="write your todo-list"></input>
+      <button>Add toDo</button>
+      </form>
+      <hr />
+      <ul>
+      {todos.map((item, index) => <li key={index}>{item}</li>)}
+      </ul>
+      
     </div>
-  );
+  )
 }
 
 export default App;
