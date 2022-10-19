@@ -6,26 +6,23 @@ const Father = styled.div`
   display: flex;
 `;
 
-const BoxOne = styled.div`
-  background-color: teal;
+// property를 넘겨받아서 dynamic하게 사용가능.
+const Box = styled.div`
+  background-color: ${(props) => props.bgColor};
   width: 100px;
   height: 100px;
 `;
 
-const BoxTwo = styled.div`
-  background-color: tomato;
-  width: 100px;
-  height: 100px;
-`;
+// Box의 모든 스타일을 상속받으려면 styled(Obj)를 사용하면됨.
+const Circle = styled(Box)`
+  border-radius: 50px;
+`
 
-const Text = styled.span`
-  color: white;
-`;
 function App() {
   return (
     <Father>
-      <BoxOne />
-      <BoxTwo />
+      <Box bgColor="tomato"/>
+      <Circle bgColor="teal"/>
     </Father>  
   );
 }
