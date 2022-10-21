@@ -3,7 +3,12 @@ import { ReactDOM } from "react-dom";
 import styled, { keyframes} from "styled-components";
 
 const Wrapper = styled.div`
+  background-color: ${(props) => props.theme.backgroundColor};
   display: flex;
+`;
+
+const Title = styled.h1`
+  color: ${(props) => props.theme.textColor};
 `;
 
 // property를 넘겨받아서 dynamic하게 사용가능.
@@ -42,6 +47,7 @@ const Box = styled.div`
   display: flexbox;
   justify-content: center;
   align-items: center;
+
   animation: ${rotateAnimation} 1s linear infinite;
   // box:span 하는것과 같은방법임. Pseudo Selector라고 부른다.
   ${Emoji}{
@@ -59,6 +65,7 @@ const Box = styled.div`
 function App() {
   return (
     <Wrapper>
+      <Title> Hello world!!</Title>
       <Box bgColor="tomato">
         <Emoji as="div"> 😇 </Emoji>
       </Box>
