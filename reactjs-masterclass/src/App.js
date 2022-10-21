@@ -1,46 +1,68 @@
 import React from "react";
 import { ReactDOM } from "react-dom";
-import styled from "styled-components";
+import styled, { keyframes} from "styled-components";
 
-const Father = styled.div`
+const Wrapper = styled.div`
   display: flex;
 `;
 
 // property를 넘겨받아서 dynamic하게 사용가능.
+
+const rotateAnimation = keyframes`
+  /* from {
+    transform: rotate(0deg);
+    border-radius: 0px;
+  }
+  to {
+    transform: rotate(360deg);
+    border-radius: 100px;
+  } */
+  0%{
+    transform: rotate(0deg);
+    border-radius: 0px;
+  }
+  50%{
+    transform: rotate(360deg);
+    border-radius: 100px;
+  }
+  100%{
+    transform: rotate(0deg);
+    border-radius: 0px;
+  }
+`;
+
+
+
 const Box = styled.div`
   background-color: ${(props) => props.bgColor};
-  width: 100px;
-  height: 100px;
-`;
+  width: 200px;
+  height: 200px;
+  display: flexbox;
+  justify-content: center;
+  align-items: center;
+  animation: ${rotateAnimation} 1s linear infinite;
+  // box:span 하는것과 같은방법임. Pseudo Selector라고 부른다.
+  span{
+    font-size: 36px;
+    // span 내부에 또다시 속성을 주려면 &: (span:hover와 같음)를 사용하면 된다.
+    &:hover{
+      font-size: 40px;
+    }
 
-// Box의 모든 스타일을 상속받으려면 styled(Obj)를 사용하면됨.
-const Circle = styled(Box)`
-  border-radius: 50px;
-`;
-
-const Btn = styled.button`
-  color: white;
-  background-color: tomato;
-  border: 0;
-  border-radius: 10px;
-`;
-
-const Input = styled.input.attrs({ required: true, minLength: 10 })`
-  color: white;
-  background-color: tomato;
+    &:active{
+      opacity: 0;
+    }
+  }
 `;
 
 function App() {
   return (
-    <Father>
-      <Btn> LogIn</Btn>
-      <Btn as="a" href="/"> LogIn</Btn>
+    <Wrapper>
+      <Box bgColor="tomato">
+        <span> 😇 </span>
+      </Box>
 
-      <Input></Input>
-      <Input></Input>
-      <Input></Input>
-      <Input></Input>
-    </Father>  
+    </Wrapper>  
   );
 }
 
