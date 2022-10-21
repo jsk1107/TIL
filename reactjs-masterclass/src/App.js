@@ -31,7 +31,9 @@ const rotateAnimation = keyframes`
   }
 `;
 
-
+const Emoji = styled.span`
+  font-size: 36px;
+`;
 
 const Box = styled.div`
   background-color: ${(props) => props.bgColor};
@@ -42,11 +44,10 @@ const Box = styled.div`
   align-items: center;
   animation: ${rotateAnimation} 1s linear infinite;
   // box:span 하는것과 같은방법임. Pseudo Selector라고 부른다.
-  span{
-    font-size: 36px;
+  ${Emoji}{
     // span 내부에 또다시 속성을 주려면 &: (span:hover와 같음)를 사용하면 된다.
     &:hover{
-      font-size: 40px;
+      font-size: 96px;
     }
 
     &:active{
@@ -59,9 +60,9 @@ function App() {
   return (
     <Wrapper>
       <Box bgColor="tomato">
-        <span> 😇 </span>
+        <Emoji as="div"> 😇 </Emoji>
       </Box>
-
+      <Emoji> 🫀 </Emoji>
     </Wrapper>  
   );
 }
