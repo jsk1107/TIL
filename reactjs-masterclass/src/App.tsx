@@ -1,5 +1,7 @@
 import React from "react";
-import { ReactDOM } from "react-dom";
+import ReactDOM from "react-dom/client";
+// import ReactDOM from 'react-dom/client';
+
 import styled, { keyframes} from "styled-components";
 
 const Wrapper = styled.div`
@@ -41,7 +43,7 @@ const Emoji = styled.span`
 `;
 
 const Box = styled.div`
-  background-color: ${(props) => props.bgColor};
+  background-color: "tomato";
   width: 200px;
   height: 200px;
   display: flexbox;
@@ -66,7 +68,7 @@ function App() {
   return (
     <Wrapper>
       <Title> Hello world!!</Title>
-      <Box bgColor="tomato">
+      <Box>
         <Emoji as="div"> 😇 </Emoji>
       </Box>
       <Emoji> 🫀 </Emoji>
