@@ -5,11 +5,11 @@ import Coin from './routes/coin';
 function Router() {
     return (<BrowserRouter>
         <Switch>
-            <Route path="/">
-                <Coins />
-            </Route>
             <Route path='/:coinId'>
                 <Coin />
+            </Route>
+            <Route path="/">
+                <Coins />
             </Route>
         </Switch>
     </BrowserRouter>);
