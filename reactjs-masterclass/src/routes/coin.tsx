@@ -1,13 +1,14 @@
 import styled from "styled-components"
+import { useParams } from "react-router-dom";
 
-const a = styled.div`
-    background-color: black;
-`;
+
+interface IParams {
+    coinId: string
+}
 
 function Coin() {
-    return <div>
-        <h1>Hello Coin</h1>
-    </div>
+    const { coinId } = useParams<IParams>();
+    return <h1>Coin: {coinId}</h1>
 }
 
 export default Coin
