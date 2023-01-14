@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components"
 
 const Header = styled.header`
-    height: 10vh;
+
+    height: 15vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,6 +16,8 @@ const Title = styled.h1`
 
 const Container = styled.div`
     padding: 0px 20px;
+    max-width: 480px;
+    margin: 0 auto;
 `;
 
 const CoinsList = styled.ul`
@@ -26,9 +29,9 @@ const Coin = styled.li`
     color: ${props => props.theme.bgColor};
     margin-bottom: 10px;
     border-radius: 15px;
-    padding: 20px;
+    /* padding: 20px; */
     a {
-        /* padding: 20px; */
+        padding: 20px;
         transition: color 0.2s ease-in;
         display: flex;
         align-items: center;
@@ -65,7 +68,6 @@ interface ICoin {
 function Coins() {
     const [coins, setCoins] = useState<ICoin[]>([]);
     const [loading, setLoading] = useState(true);
-    const [logos, setLogos] = useState();
     useEffect(() => {
         // const getCoins = async () => {
         //     const response = await fetch('https://api.coinpaprika.com/v1/coins');
@@ -89,7 +91,10 @@ function Coins() {
             {loading ? (<Loading>"Loading..."</Loading>) : (<CoinsList>
                 {coins.map((coin) => (
                     <Coin key={coin.id}>
-                        <Link to={`/${coin.id}`}>
+                        <Link to={{
+                            pathname: `/${coin.id}`,
+                            state: { name: coin.name }
+                        }}>
                             <Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLocaleLowerCase()}`}></Img>
                             {coin.name} &rarr;
                         </Link>
