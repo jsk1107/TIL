@@ -3,6 +3,48 @@ import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 
+const Conatainer = styled.div`
+    padding: 0px 20px;
+    max-width: 480px;
+    margin: 0 auto;
+`;
+
+const Header = styled.header`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const Title = styled.h1`
+    font-size: 48px;
+    color: ${props => props.theme.accentColor};
+`;
+
+const PriceInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 10px;
+`;
+
+const Price = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+   span:first-child {
+     font-size: 10px;
+     font-weight: 400;
+     text-transform: uppercase;
+     margin-bottom: 5px;
+   }
+`;
+
+const Description = styled.p`
+    margin: 20px 0px;
+`;
+
 interface ICoinId {
     coinId: string
 }
@@ -70,11 +112,51 @@ function Coin() {
             const priceData = await (await fetch(`https://api.coinpaprika.com/v1/ticker/${coinId}`)).json();
             setInfo(infoData);
             setPriceInfo(priceData);
+            console.log(infoData);
+            console.log(priceData);
         })();
-        console.log(priceinfo);
     }, [])
+    const time = new Date();
     return (
-        <h1>Coin: {state?.name || "Hi"} {info?.id} {priceinfo?.id}</h1>
+        <Conatainer>
+            <Header>
+                <Title>
+                    {state?.name || "Loading ..."}
+                </Title>
+            </Header>
+            <PriceInfo>
+                <Price>
+                    <span>Coin Name</span>
+                    <span>{priceinfo?.name}</span>
+                </Price>
+                <Price>
+                    <span>USD Price</span>
+                    <span>${Math.round(Number(priceinfo?.price_usd))}</span>
+                </Price>
+                <Price>
+                    <span>Update Time </span>
+                    <span>
+                        {time.getFullYear()} / {time.getMonth() + 1} / {time.getDate()}::
+                        {time.getHours()}h:{time.getMinutes()}m
+                    </span>
+                </Price>
+            </PriceInfo>
+            <Description>
+                {info?.description}
+            </Description>
+
+            <PriceInfo>
+                <Price>
+                    <span>Total Suply</span>
+                    <span>{priceinfo?.total_supply}</span>
+                </Price>
+                <Price>
+                    <span>rank</span>
+                    <span>{priceinfo?.rank}</span>
+                </Price>
+            </PriceInfo>
+
+        </Conatainer>
 
     );
 }
