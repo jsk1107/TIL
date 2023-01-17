@@ -1,6 +1,8 @@
 import styled from "styled-components"
-import { useLocation, useParams } from "react-router-dom";
+import { Link, Route, Switch, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Chart from "./Chart";
+import Price from "./Price";
 
 
 const Conatainer = styled.div`
@@ -20,7 +22,7 @@ const Title = styled.h1`
     color: ${props => props.theme.accentColor};
 `;
 
-const PriceInfo = styled.div`
+const Overview = styled.div`
     display: flex;
     justify-content: space-between;
     background-color: rgba(0, 0, 0, 0.5);
@@ -28,7 +30,7 @@ const PriceInfo = styled.div`
     border-radius: 10px;
 `;
 
-const Price = styled.div`
+const OverviewItem = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -39,6 +41,32 @@ const Price = styled.div`
      text-transform: uppercase;
      margin-bottom: 5px;
    }
+`;
+
+const Tabs = styled.div`
+    display: grid;
+    gap: 10px;
+    margin: 25px 10px;
+   grid-template-columns: repeat(2, 1fr);
+`;
+
+const Tab = styled.span< { isActive: boolean }> `
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 7px 0px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color : ${(props) => props.isActive ? props.theme.accentColor : props.theme.textColor};
+    a{
+        display: block;
+    }
+`;
+
+const Loader = styled.span`
+    text-align: center;
+    display: block;
 `;
 
 const Description = styled.p`
@@ -106,56 +134,81 @@ function Coin() {
     const { state } = useLocation<IState>();
     const [info, setInfo] = useState<IInfo>();
     const [priceinfo, setPriceInfo] = useState<IPrice>();
+    const [loading, setLoading] = useState(true);
+    const chartMatch = useRouteMatch("/:coinId/chart");
+    const priceMatch = useRouteMatch("/:coinId/price");
+
     useEffect(() => {
         (async () => {
             const infoData = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
             const priceData = await (await fetch(`https://api.coinpaprika.com/v1/ticker/${coinId}`)).json();
             setInfo(infoData);
             setPriceInfo(priceData);
-            console.log(infoData);
-            console.log(priceData);
+            setLoading(false);
         })();
-    }, [])
+    }, [coinId]);
     const time = new Date();
     return (
         <Conatainer>
             <Header>
                 <Title>
-                    {state?.name || "Loading ..."}
+                    {state?.name ? state.name : loading ? "Loading..." : info?.name}
                 </Title>
             </Header>
-            <PriceInfo>
-                <Price>
-                    <span>Coin Name</span>
-                    <span>{priceinfo?.name}</span>
-                </Price>
-                <Price>
-                    <span>USD Price</span>
-                    <span>${Math.round(Number(priceinfo?.price_usd))}</span>
-                </Price>
-                <Price>
-                    <span>Update Time </span>
-                    <span>
-                        {time.getFullYear()} / {time.getMonth() + 1} / {time.getDate()}::
-                        {time.getHours()}h:{time.getMinutes()}m
-                    </span>
-                </Price>
-            </PriceInfo>
-            <Description>
-                {info?.description}
-            </Description>
+            {loading ? (
+                <Loader>Loading...</Loader>
+            ) : (
+                <>
+                    <Overview>
+                        <OverviewItem>
+                            <span>Coin Name</span>
+                            <span>{priceinfo?.name}</span>
+                        </OverviewItem>
+                        <OverviewItem>
+                            <span>USD Price</span>
+                            <span>${Math.round(Number(priceinfo?.price_usd))}</span>
+                        </OverviewItem>
+                        <OverviewItem>
+                            <span>Update Time </span>
+                            <span>
+                                {time.getFullYear()} / {time.getMonth() + 1} / {time.getDate()}::
+                                {time.getHours()}h:{time.getMinutes()}m
+                            </span>
+                        </OverviewItem>
+                    </Overview>
+                    <Description>
+                        {info?.description}
+                    </Description>
 
-            <PriceInfo>
-                <Price>
-                    <span>Total Suply</span>
-                    <span>{priceinfo?.total_supply}</span>
-                </Price>
-                <Price>
-                    <span>rank</span>
-                    <span>{priceinfo?.rank}</span>
-                </Price>
-            </PriceInfo>
+                    <Overview>
+                        <OverviewItem>
+                            <span>Total Suply</span>
+                            <span>{priceinfo?.total_supply}</span>
+                        </OverviewItem>
+                        <OverviewItem>
+                            <span>rank</span>
+                            <span>{priceinfo?.rank}</span>
+                        </OverviewItem>
+                    </Overview>
 
+                    <Tabs>
+                        <Tab isActive={chartMatch !== null}>
+                            <Link to={`/${coinId}/chart`}> Chart</Link>
+                        </Tab>
+                        <Tab isActive={priceMatch !== null}>
+                            <Link to={`/${coinId}/price`}> Price </Link>
+                        </Tab>
+                    </Tabs>
+
+                    <Switch>
+                        <Route path={`/:coinId/price`}>
+                            <Price />
+                        </Route>
+                        <Route path={`/:coinId/chart`}>
+                            <Chart />
+                        </Route>
+                    </Switch>
+                </>)}
         </Conatainer>
 
     );
