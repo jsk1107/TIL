@@ -25,7 +25,7 @@ function Chart({ coinId }: IChart) {
     const { isLoading, data } = useQuery<IHistoricalData[]>(["chart", coinId], () => fetchChart({ coinId }));
     const isDark = useRecoilValue(isDarkAtom);
     return <div>
-        {isLoading ? "Loading Chart ..." :
+        {isLoading ? "Loading Chart..." :
             <ReactApexChart
                 type="line"
                 series={[
