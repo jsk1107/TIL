@@ -13,3 +13,11 @@ export function fetchCoinInfo(coinId: string) {
 export function fetchCoinTickers(coinId: string) {
     return fetch(`${BASED_URL}/tickers/${coinId}`).then((response) => response.json())
 }
+
+interface IfetchChart {
+    coinId: string;
+}
+
+export function fetchChart({ coinId }: IfetchChart) {
+    return fetch(`https://ohlcv-api.nomadcoders.workers.dev/?coinId=${coinId}`).then((response) => response.json());
+}

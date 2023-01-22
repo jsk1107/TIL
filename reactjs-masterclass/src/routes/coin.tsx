@@ -5,7 +5,7 @@ import Chart from "./Chart";
 import Price from "./Price";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
-
+import { Helmet } from "react-helmet";
 
 const Conatainer = styled.div`
     padding: 0px 20px;
@@ -36,6 +36,7 @@ const OverviewItem = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: ${(props) => props.theme.textColor};
 
    span:first-child {
      font-size: 10px;
@@ -64,6 +65,12 @@ const Tab = styled.span< { isActive: boolean }> `
     a{
         display: block;
     }
+`;
+
+const Home = styled.div`
+    display: flex;
+    align-items: flex-end;
+    
 `;
 
 const Loader = styled.span`
@@ -113,6 +120,25 @@ interface IInfo {
     last_data_at: string;
 }
 
+interface IQutes {
+    price: number;
+    volume_24h: number;
+    volume_24h_change_24h: number;
+    market_cap: number;
+    market_cap_change_24h: number;
+    percent_change_15m: number;
+    percent_change_30m: number;
+    percent_change_1h: number;
+    percent_change_6h: number;
+    percent_change_12h: number;
+    percent_change_24h: number;
+    percent_change_7d: number;
+    percent_change_30d: number;
+    percent_change_1y: number;
+    ath_price: number;
+    ath_date: string
+    percent_from_price_ath: number
+}
 interface IPrice {
     id: string;
     name: string;
@@ -129,6 +155,12 @@ interface IPrice {
     percent_change_24h: string;
     percent_change_7d: string;
     last_updated: string;
+    quotes: {
+        USD:
+        IQutes;
+
+    }
+
 }
 
 function Coin() {
@@ -136,10 +168,8 @@ function Coin() {
     const { state } = useLocation<IState>();
     const chartMatch = useRouteMatch("/:coinId/chart");
     const priceMatch = useRouteMatch("/:coinId/price");
-    const { isLoading: infoLoading, data: infoData } = useQuery<IInfo>(['info', coinId], () => fetchCoinInfo(coinId));
+    const { isLoading: infoLoading, data: infoData } = useQuery<IInfo>(['info', coinId], () => fetchCoinInfo(coinId), { refetchInterval: 5000, });
     const { isLoading: tickersLoading, data: tickersData } = useQuery<IPrice>(['tickers', coinId], () => fetchCoinTickers(coinId));
-
-
     // const [info, setInfo] = useState<IInfo>();
     // const [priceinfo, setPriceInfo] = useState<IPrice>();
     // const [loading, setLoading] = useState(true);
@@ -156,10 +186,20 @@ function Coin() {
     const loading = infoLoading || tickersLoading;
     return (
         <Conatainer>
+            <Helmet>
+                <title>
+                    {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+                </title>
+            </Helmet>
             <Header>
                 <Title>
                     {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
                 </Title>
+                <Home>
+                    <Link to={`/`}>
+                        🏠
+                    </Link>
+                </Home>
             </Header>
             {loading ? (
                 <Loader>Loading...</Loader>
@@ -172,7 +212,7 @@ function Coin() {
                         </OverviewItem>
                         <OverviewItem>
                             <span>USD Price</span>
-                            <span>${Math.round(Number(tickersData?.price_usd))}</span>
+                            <span>${Math.round(Number(tickersData?.quotes.USD.price))}</span>
                         </OverviewItem>
                         <OverviewItem>
                             <span>Update Time </span>
@@ -208,10 +248,10 @@ function Coin() {
 
                     <Switch>
                         <Route path={`/:coinId/price`}>
-                            <Price />
+                            <Price coinId={coinId} />
                         </Route>
                         <Route path={`/:coinId/chart`}>
-                            <Chart />
+                            <Chart coinId={coinId} />
                         </Route>
                     </Switch>
                 </>)}

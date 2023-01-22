@@ -3,6 +3,9 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components"
 import { fetchCoins } from "../api";
+import { Helmet } from "react-helmet";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Header = styled.header`
 
@@ -23,14 +26,15 @@ const Container = styled.div`
 `;
 
 const CoinsList = styled.ul`
-
 `;
 
 const Coin = styled.li`
-    background-color: white;
-    color: ${props => props.theme.bgColor};
+    background-color: ${props => props.theme.libgColor};
+    color: ${props => props.theme.textColor};
     margin-bottom: 10px;
     border-radius: 15px;
+    border: 1px solid white;
+    border-color: ${(props) => props.theme.borderColor};
     /* padding: 20px; */
     a {
         padding: 20px;
@@ -86,11 +90,17 @@ function Coins() {
     // }, []);
 
     const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins)
+    const setDarkAtom = useSetRecoilState(isDarkAtom);
+    const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
 
     return (
         <Container>
+            <Helmet>
+                <title> Coins!! </title>
+            </Helmet>
             <Header>
                 <Title>Coins!!</Title>
+                <button onClick={toggleDarkAtom}> Toggle button </button>
             </Header>
             {isLoading ? (<Loading>"Loading..."</Loading>) : (<CoinsList>
                 {data?.map((coin) => (
