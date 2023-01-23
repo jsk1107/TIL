@@ -7,11 +7,3 @@ export const darkTheme: DefaultTheme = {
   borderColor: "white",
   libgColor: "#2f3640",
 };
-
-export const lightTheme: DefaultTheme = {
-  bgColor: "whitesmoke",
-  textColor: "#2f3640",
-  accentColor: "#44bd32",
-  borderColor: "#2f3640",
-  libgColor: "white",
-};
