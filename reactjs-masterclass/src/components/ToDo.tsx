@@ -1,17 +1,26 @@
-import { IToDo } from "../atom";
+import { useSetRecoilState } from "recoil";
+import { IToDo, toDoState } from "../atom";
+import { Categories } from "../atom";
 
-function ToDo({ text, category }: IToDo) {
+function ToDo({ text, category, id }: IToDo) {
+    const setTodos = useSetRecoilState(toDoState);
     const onClick = (newCategory: IToDo["category"]) => {
-        console.log(newCategory)
-    }
+        setTodos((allToDo) => {
+            const targetIndex = allToDo.findIndex((toDo) => toDo.id == id);
+            const newToDos = { text, category: newCategory, id };
+            // slice는 new array를 생성한다. splice는 기존 array를 수정한다. 원본수정하기 때문에 버그발생 존재
+            return [...allToDo.slice(0, targetIndex), newToDos, ...allToDo.slice(targetIndex + 1)];
+        })
+    };
+    console.log(Categories.TODO);
     return (
         <li>
             <span>
                 {text}
             </span>
-            {category !== "TODO" && <button onClick={() => onClick("TODO")}>TODO</button>}
-            {category !== "DOING" && <button onClick={() => onClick("DOING")}>DOING</button>}
-            {category !== "DONE" && <button onClick={() => onClick("DONE")}>DONE</button>}
+            {category !== Categories.TODO && <button onClick={() => onClick(Categories.TODO)}>TODO</button>}
+            {category !== Categories.DOING && <button onClick={() => onClick(Categories.DOING)}>DOING</button>}
+            {category !== Categories.DONE && <button onClick={() => onClick(Categories.DONE)}>DONE</button>}
         </li>
     );
 }
