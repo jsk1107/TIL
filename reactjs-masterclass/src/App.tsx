@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
-import TodoList from "./TodoList";
+import Router from "./Router";
+import { Reset } from "styled-reset";
 
 
 const GlobalStyle = createGlobalStyle`
@@ -23,11 +24,11 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <>
+      <Reset />
       <GlobalStyle />
-      <TodoList />
+      <Router />
     </>
-
-  );
+  )
 }
 
 export default App;
