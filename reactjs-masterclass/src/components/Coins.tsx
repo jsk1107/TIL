@@ -4,7 +4,9 @@ const Container = styled.div`
     
 `;
 
-const Header = styled.header``;
+const Header = styled.header`
+    font-size: 3rem;
+`;
 
 const CoinsList = styled.ul``;
 
