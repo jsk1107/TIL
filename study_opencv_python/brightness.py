@@ -1,7 +1,6 @@
 import sys
 import cv2
 
-
 src = cv2.imread('data/lenna.bmp', cv2.IMREAD_COLOR)
 
 if src is None:
