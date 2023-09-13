@@ -14,7 +14,6 @@ root.render(
   <RecoilRoot>
     <ThemeProvider theme={darkTheme}>
       <App />
-      {/* <Tmp /> */}
     </ThemeProvider>
   </RecoilRoot>
   // </React.StrictMode>
