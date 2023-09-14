@@ -13,6 +13,7 @@ const CoinsList = styled.ul`
     width: 50%;
     height: 50%;
     display: flex;
+    justify-content: center;
 `;
 
 const Coin = styled.li`
