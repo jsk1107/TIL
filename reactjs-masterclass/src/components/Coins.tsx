@@ -14,6 +14,7 @@ const CoinsList = styled.ul`
     height: 50%;
     display: flex;
     justify-content: center;
+    align-items: center;
 `;
 
 const Coin = styled.li`
