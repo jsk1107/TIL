@@ -12,6 +12,7 @@ const Header = styled.header`
 const CoinsList = styled.ul`
     width: 50%;
     height: 50%;
+    display: flex;
 `;
 
 const Coin = styled.li`
