@@ -21,6 +21,7 @@ const Coin = styled.li`
     a {
         display: block;
         padding: 20px;
+        transition: color 0.2s ease-in;
     }
 
 `;
