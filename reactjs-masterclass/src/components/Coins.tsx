@@ -16,6 +16,7 @@ const CoinsList = styled.ul`
     justify-content: center;
     align-items: center;
     border: 1px solid #ccc;
+    border-radius: 5px;
 `;
 
 const Coin = styled.li`
