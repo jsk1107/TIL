@@ -17,7 +17,6 @@ const CoinsList = styled.ul`
     align-items: center;
     border: 1px solid #ccc;
     border-radius: 5px;
-    backgound-color: white;
 `;
 
 const Coin = styled.li`
