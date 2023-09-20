@@ -24,7 +24,8 @@ const Coin = styled.li`
   border-radius: 15px;
 
   a {
-    display: block;
+    display: flex;
+    align-items: center;
     padding: 20px;
     transition: color 0.2s ease-in;
   }
@@ -42,6 +43,12 @@ const Loading = styled.div`
 const Title = styled.div`
   color: ${(props) => props.theme.accentColor};
   font-size: 48px;
+`;
+
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
 `;
 
 interface IUsd {
@@ -88,7 +95,7 @@ function Coins() {
     (async () => {
       const response = await fetch("https://api.coinpaprika.com/v1/tickers");
       const json = await response.json();
-      setCoins(json.slice(0, 100));
+      setCoins(json);
       setLoading(false);
     })();
   }, []);
@@ -103,7 +110,20 @@ function Coins() {
         <CoinsList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}> {coin.name} &rarr; </Link>
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: {
+                    name: coin.id,
+                  },
+                }}
+              >
+                <Img
+                  src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                />
+                {coin.name}
+                &rarr;
+              </Link>
             </Coin>
           ))}
         </CoinsList>
