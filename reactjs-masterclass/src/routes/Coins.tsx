@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import fetchCoin from "../api/fetchCoin";
 
 const Container = styled.div`
   padding: 20px;
@@ -89,26 +91,27 @@ interface ICoin {
 }
 
 function Coins() {
-  const [coins, setCoins] = useState<ICoin[]>([]); // List 내부에 ICoin 타입의 객체가 들어있다는 뜻
-  const [loading, setLoading] = useState<boolean>(true);
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/tickers");
-      const json = await response.json();
-      setCoins(json);
-      setLoading(false);
-    })();
-  }, []);
+  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoin);
+  // const [coins, setCoins] = useState<ICoin[]>([]); // List 내부에 ICoin 타입의 객체가 들어있다는 뜻
+  // const [loading, setLoading] = useState<boolean>(true);
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await fetch("https://api.coinpaprika.com/v1/tickers");
+  //     const json = await response.json();
+  //     setCoins(json);
+  //     setLoading(false);
+  //   })();
+  // }, []);
   return (
     <Container>
       <Header>
         <Title> 코인 </Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loading>Loading</Loading>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {data?.map((coin) => (
             <Coin key={coin.id}>
               <Link
                 to={{
