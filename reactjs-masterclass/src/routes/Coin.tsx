@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, Route, Switch, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Switch,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
 import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
@@ -140,9 +147,10 @@ const Tabs = styled.div`
   margin: 20px 0;
 `;
 
-const Tab = styled.div`
+const Tab = styled.div<{ isActive: boolean }>`
   background: ${(props) => props.theme.bgColor};
-  color: ${(props) => props.theme.textColor};
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
   background: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   text-transform: uppercase;
@@ -164,6 +172,9 @@ function Coin() {
   const { state } = useLocation<IRouteState>();
   const [info, setInfo] = useState<IInfoData>();
   const [priceInfo, setPriceInfo] = useState<IPriceData>();
+  // useRouteMatch는 현재 링크와 인자로 받은 링크가 동일한지 여부를 확인한다.
+  const usePriceMatch = useRouteMatch(`/${coinId}/price`);
+  const useChartMatch = useRouteMatch(`/${coinId}/chart`);
 
   useEffect(() => {
     (async () => {
@@ -225,10 +236,10 @@ function Coin() {
       )}
 
       <Tabs>
-        <Tab>
+        <Tab isActive={useChartMatch !== null}>
           <Link to={{ pathname: `/${coinId}/Chart` }}>Chart</Link>
         </Tab>
-        <Tab>
+        <Tab isActive={usePriceMatch !== null}>
           <Link to={{ pathname: `/${coinId}/price` }}>Price</Link>
         </Tab>
       </Tabs>
