@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Switch,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
 import styled from "styled-components";
+import Chart from "./Chart";
+import Price from "./Price";
 
 interface ICoin {
   coinId: string;
@@ -131,6 +140,30 @@ const Description = styled.div`
   margin: 10px 0;
 `;
 
+const Tabs = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+`;
+
+const Tab = styled.div<{ isActive: boolean }>`
+  background: ${(props) => props.theme.bgColor};
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: bold;
+  width: 49%;
+  text-align: center;
+  a {
+    padding: 10px 20px;
+    display: block;
+  }
+`;
+
 function Coin() {
   // url의 queryString을 가지고온다.
   // key는 Route에서 :coinId 이런식으로 쓰면 coinId가 key가 된다. value는 사용자가 입력한 값
@@ -139,6 +172,9 @@ function Coin() {
   const { state } = useLocation<IRouteState>();
   const [info, setInfo] = useState<IInfoData>();
   const [priceInfo, setPriceInfo] = useState<IPriceData>();
+  // useRouteMatch는 현재 링크와 인자로 받은 링크가 동일한지 여부를 확인한다.
+  const usePriceMatch = useRouteMatch(`/${coinId}/price`);
+  const useChartMatch = useRouteMatch(`/${coinId}/chart`);
 
   useEffect(() => {
     (async () => {
@@ -157,7 +193,7 @@ function Coin() {
       setPriceInfo(priceData);
       setLoading(false);
     })();
-  }, [coinId]); // state.name이 변하면 re-rendering됨. 하지만 state.name이 변하지않기때문에(불변) 영원히 바뀌지 않는다.
+  }, [coinId]); // coinId가 변하면 re-rendering됨. 하지만 변하지않기때문에(불변) 영원히 바뀌지 않는다.
   return (
     <Container>
       <Header>
@@ -198,6 +234,24 @@ function Coin() {
           </Overview>
         </>
       )}
+
+      <Tabs>
+        <Tab isActive={useChartMatch !== null}>
+          <Link to={{ pathname: `/${coinId}/Chart` }}>Chart</Link>
+        </Tab>
+        <Tab isActive={usePriceMatch !== null}>
+          <Link to={{ pathname: `/${coinId}/price` }}>Price</Link>
+        </Tab>
+      </Tabs>
+
+      <Switch>
+        <Route path={`/${coinId}/chart`}>
+          <Chart />
+        </Route>
+        <Route path={`/${coinId}/price`}>
+          <Price />
+        </Route>
+      </Switch>
     </Container>
   );
 }
