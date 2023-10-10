@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import fetchCoin from "../api/fetchCoin";
+import { fetchCoin } from "../api/fetchCoin";
 
 const Container = styled.div`
   padding: 20px;
@@ -124,8 +124,7 @@ function Coins() {
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                 />
-                {coin.name}
-                &rarr;
+                {coin.name} &rarr;
               </Link>
             </Coin>
           ))}
