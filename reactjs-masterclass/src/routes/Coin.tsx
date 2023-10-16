@@ -12,6 +12,10 @@ import Chart from "./Chart";
 import Price from "./Price";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "../api/fetchCoin";
+import { Helmet } from "react-helmet";
+import Coins from "./Coins";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 interface ICoin {
   coinId: string;
@@ -210,7 +214,13 @@ function Coin() {
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>{coinId}</title>
+      </Helmet>
       <Header>
+        <Link to={{ pathname: "/" }}>
+          <FontAwesomeIcon icon={faHouse} />
+        </Link>
         <Title>
           {state?.name ? state.name : loading ? "Loading" : infoData?.name}
         </Title>

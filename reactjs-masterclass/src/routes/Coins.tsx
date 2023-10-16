@@ -3,6 +3,8 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoin } from "../api/fetchCoin";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atom";
 
 const Container = styled.div`
   padding: 20px;
@@ -21,7 +23,7 @@ const CoinsList = styled.ul``;
 
 const Coin = styled.li`
   background: white;
-  color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   margin: 10px 0;
   border-radius: 15px;
 
@@ -92,6 +94,8 @@ interface ICoin {
 
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoin);
+  const setIsDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDartAtom = () => setIsDarkAtom((prev) => !prev);
   // const [coins, setCoins] = useState<ICoin[]>([]); // List 내부에 ICoin 타입의 객체가 들어있다는 뜻
   // const [loading, setLoading] = useState<boolean>(true);
   // useEffect(() => {
@@ -105,6 +109,7 @@ function Coins() {
   return (
     <Container>
       <Header>
+        <button onClick={toggleDartAtom}>theme toggle</button>
         <Title> 코인 </Title>
       </Header>
       {isLoading ? (
