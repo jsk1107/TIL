@@ -10,6 +10,12 @@ import {
 import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
+import { useQuery } from "react-query";
+import { fetchCoinInfo, fetchCoinTickers } from "../api/fetchCoin";
+import { Helmet } from "react-helmet";
+import Coins from "./Coins";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 interface ICoin {
   coinId: string;
@@ -168,14 +174,22 @@ function Coin() {
   // url의 queryString을 가지고온다.
   // key는 Route에서 :coinId 이런식으로 쓰면 coinId가 key가 된다. value는 사용자가 입력한 값
   const { coinId } = useParams<ICoin>();
-  const [loading, setLoading] = useState<boolean>(true);
   const { state } = useLocation<IRouteState>();
-  const [info, setInfo] = useState<IInfoData>();
-  const [priceInfo, setPriceInfo] = useState<IPriceData>();
   // useRouteMatch는 현재 링크와 인자로 받은 링크가 동일한지 여부를 확인한다.
   const usePriceMatch = useRouteMatch(`/${coinId}/price`);
   const useChartMatch = useRouteMatch(`/${coinId}/chart`);
+  const { isLoading: infoLoading, data: infoData } = useQuery(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId) // 함수에 인자를 받아야하기 때문에 익명함수를 사용하여 한번 더 패킹해줘야한다.
+  );
+  const { isLoading: tickersLoading, data: tickersData } = useQuery(
+    ["tickers", coinId],
+    () => fetchCoinTickers(coinId)
+  );
 
+  /* const [loading, setLoading] = useState<boolean>(true);
+  const [info, setInfo] = useState<IInfoData>();
+  const [priceInfo, setPriceInfo] = useState<IPriceData>();
   useEffect(() => {
     (async () => {
       // coinId로 인자를 주어야한다. useParams은 URL 값을 바로 가지고 오기 때문이다.
@@ -193,12 +207,22 @@ function Coin() {
       setPriceInfo(priceData);
       setLoading(false);
     })();
-  }, [coinId]); // coinId가 변하면 re-rendering됨. 하지만 변하지않기때문에(불변) 영원히 바뀌지 않는다.
+  }, [coinId]); // coinId가 변하면 re-rendering됨. 하지만 변하지않기때문에(불변) 영원히 바뀌지 않는다. */
+
+  // info fetch와 ticker fetch 둘다 작업이 종료되야만 화면이 렌더링 됨
+  // || 연산자는 둘다 false일때 false. 하나라도 true면 true를 반환함
+  const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>{coinId}</title>
+      </Helmet>
       <Header>
+        <Link to={{ pathname: "/" }}>
+          <FontAwesomeIcon icon={faHouse} />
+        </Link>
         <Title>
-          {state?.name ? state.name : loading ? "Loading" : info?.name}
+          {state?.name ? state.name : loading ? "Loading" : infoData?.name}
         </Title>
       </Header>
       {loading ? (
@@ -208,28 +232,28 @@ function Coin() {
           <Overview>
             <OverviewContent>
               <span>rank:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewContent>
             <OverviewContent>
               <span>symbol:</span>
-              <span>${info?.symbol}</span>
+              <span>${infoData?.symbol}</span>
             </OverviewContent>
             <OverviewContent>
               <span>open source:</span>
-              <span>{info?.open_source ? "Yes" : "No"}</span>
+              <span>{infoData?.open_source ? "Yes" : "No"}</span>
             </OverviewContent>
           </Overview>
 
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
 
           <Overview>
             <OverviewContent>
               <span> total supply:</span>
-              <span> {priceInfo?.quotes.USD.price}</span>
+              <span> {tickersData?.quotes.USD.price}</span>
             </OverviewContent>
             <OverviewContent>
               <span> max supply:</span>
-              <span> {priceInfo?.max_supply} </span>
+              <span> {tickersData?.max_supply} </span>
             </OverviewContent>
           </Overview>
         </>
@@ -245,10 +269,10 @@ function Coin() {
       </Tabs>
 
       <Switch>
-        <Route path={`/${coinId}/chart`}>
-          <Chart />
+        <Route path="/:coinId/Chart">
+          <Chart coinId={coinId} />
         </Route>
-        <Route path={`/${coinId}/price`}>
+        <Route path=":/coinId/Price">
           <Price />
         </Route>
       </Switch>
