@@ -4,6 +4,7 @@ import App from "./App";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "styled-components";
 import { darkTheme } from "./theme";
+import React from "react";
 
 const queryClient = new QueryClient();
 
