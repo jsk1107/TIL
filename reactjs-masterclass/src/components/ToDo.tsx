@@ -1,28 +1,50 @@
-import { useSetRecoilState } from "recoil";
-import { IToDo, toDoState } from "../atom";
-import { Categories } from "../atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { IToDo, toDoState } from "../atoms";
 
 function ToDo({ text, category, id }: IToDo) {
-    const setTodos = useSetRecoilState(toDoState);
-    const onClick = (newCategory: IToDo["category"]) => {
-        setTodos((allToDo) => {
-            const targetIndex = allToDo.findIndex((toDo) => toDo.id == id);
-            const newToDos = { text, category: newCategory, id };
-            // slice는 new array를 생성한다. splice는 기존 array를 수정한다. 원본수정하기 때문에 버그발생 존재
-            return [...allToDo.slice(0, targetIndex), newToDos, ...allToDo.slice(targetIndex + 1)];
-        })
-    };
-    console.log(Categories.TODO);
-    return (
-        <li>
-            <span>
-                {text}
-            </span>
-            {category !== Categories.TODO && <button onClick={() => onClick(Categories.TODO)}>TODO</button>}
-            {category !== Categories.DOING && <button onClick={() => onClick(Categories.DOING)}>DOING</button>}
-            {category !== Categories.DONE && <button onClick={() => onClick(Categories.DONE)}>DONE</button>}
-        </li>
-    );
+  //   const onClick = (newCategory: IToDo["category"]) => {
+  // console.log("I wanna to ", newCategory);
+  //   };
+  const setToDos = useSetRecoilState(toDoState);
+  const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const {
+      currentTarget: { name },
+    } = event;
+    setToDos((oldToDos) => {
+      const targetIndex = oldToDos.findIndex(
+        (arrayValue) => arrayValue.id === id
+      );
+      const newToDos = { text, id, category: name as any };
+      return [
+        ...oldToDos.slice(0, targetIndex),
+        newToDos,
+        ...oldToDos.slice(targetIndex + 1),
+      ];
+    });
+  };
+  return (
+    <li>
+      <span>{text}</span>
+      {category !== "DOING" && (
+        // <button onClick={() => onClick("DOING")}>Doing</button>
+        <button name="DOING" onClick={onClick}>
+          Doing
+        </button>
+      )}
+      {category !== "TODO" && (
+        // <button onClick={() => onClick("TODO")}>TODO</button>
+        <button name="TODO" onClick={onClick}>
+          TODO
+        </button>
+      )}
+      {category !== "DONE" && (
+        // <button onClick={() => onClick("DONE")}>Done</button>
+        <button name="DONE" onClick={onClick}>
+          DONE
+        </button>
+      )}
+    </li>
+  );
 }
 
 export default ToDo;
