@@ -1,13 +1,18 @@
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
+from fastapi import Form
 
 class Item(BaseModel):
     item: str
     status: str
 
 class Todo(BaseModel):
-    id: int=Field(title="고객ID", gt=0, le=1000)
+    id: Optional[int]=None
     item: str=Field(title="ToDos")
+
+    @classmethod
+    def as_form(cls, item: str=Form(...)):
+        return cls(item=item)
 
     class Config:
         json_schema_extra = {
